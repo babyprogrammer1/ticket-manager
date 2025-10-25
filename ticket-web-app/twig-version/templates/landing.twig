@@ -1,0 +1,49 @@
+{% extends 'layout.twig' %}
+{% block title %}Home — TicketFlow{% endblock %}
+{% block body %}
+  <main>
+    <section class="hero--alt container">
+      <div class="hero-inner">
+        <h1 class="hero-title">TicketFlow</h1>
+        <p class="hero-lead">Your tickets, simplified and secure.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="/auth/signup">Get Started</a>
+          <a class="btn btn-outline" href="/auth/login">Login</a>
+        </div>
+      </div>
+      <div class="decor-circle one" aria-hidden="true"></div>
+      <div class="decor-circle small two" aria-hidden="true"></div>
+      <svg class="wave" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0,50 C360,110 1080,0 1440,50 L1440,100 L0,100 Z" fill="currentColor"/></svg>
+    </section>
+
+    <section class="container section-pad">
+      <div class="centered center-block" style="max-width:900px;margin-bottom:28px">
+        <h2 class="h1-large">Manage Complaints & Requests</h2>
+        <p class="muted">Centralize customer complaints, track status, and resolve issues faster.</p>
+      </div>
+      <div class="grid cols-3">
+        <div class="card card-center">
+          <div class="avatar-large">
+            <span class="material-symbols-outlined">support_agent</span>
+          </div>
+          <h3 style="margin-top:12px">Centralize Complaints</h3>
+          <p class="muted">Collect customer complaints and requests in one place to prioritize and act on them quickly.</p>
+        </div>
+        <div class="card card-center">
+          <div class="avatar-large">
+            <span class="material-symbols-outlined">pending_actions</span>
+          </div>
+          <h3 style="margin-top:12px">Track Status &amp; SLAs</h3>
+          <p class="muted">Monitor progress, set priorities, and ensure timely responses with configurable statuses.</p>
+        </div>
+        <div class="card card-center">
+          <div class="avatar-large">
+            <span class="material-symbols-outlined">thumb_up</span>
+          </div>
+          <h3 style="margin-top:12px">Resolve Faster</h3>
+          <p class="muted">Assign issues to teams, communicate updates, and close complaints efficiently.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
