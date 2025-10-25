@@ -1,0 +1,190 @@
+/* Shared design system (copied from root assets) */
+:root{
+  --max-width:1440px;
+  --color-bg:#ffffff;
+  --color-muted:#6b7280;
+  --color-open:#16a34a; /* green */
+  --color-in-progress:#f59e0b; /* amber */
+  --color-closed:#6b7280; /* gray */
+  --card-bg:#ffffff;
+  --card-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+.container{max-width:var(--max-width);margin:0 auto;padding:24px}
+.hero{position:relative;overflow:hidden;padding:48px 24px 120px}
+.hero .hero-inner{display:flex;flex-direction:column;gap:24px;align-items:flex-start}
+.card{background:var(--card-bg);border-radius:12px;box-shadow:var(--card-shadow);padding:18px}
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.grid.cols-3{grid-template-columns:1fr}.grid.cols-2{grid-template-columns:1fr}}
+.footer{padding:24px;text-align:center;color:var(--color-muted);font-size:14px}
+.nav{display:flex;gap:12px;align-items:center}
+.button{background:#0f172a;color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer}
+.input{padding:10px;border-radius:8px;border:1px solid #e6e9ef;width:100%}
+.ticket-card{display:flex;flex-direction:column;gap:8px}
+.status{display:inline-block;padding:6px 10px;border-radius:999px;color:#fff;font-size:13px}
+.status.open{background:var(--color-open)}
+.status.in_progress{background:var(--color-in-progress)}
+.status.closed{background:var(--color-closed)}
+.focus-outline:focus{outline:3px solid rgba(59,130,246,0.3);outline-offset:2px}
+/* decorative */
+.hero svg.wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:120px}
+.decor-circle{position:absolute;width:160px;height:160px;border-radius:50%;opacity:0.95}
+.decor-circle.small{width:96px;height:96px}
+.decor-circle.one{right:14%;top:8% ;background:#eef6ff}
+.decor-circle.two{left:6%;top:40%;background:#fff0db}
+/* Shared design system matching the TicketFlow example */
+:root{
+  --max-width:1440px;
+  --primary:#1173d4;
+  --accent:#ec4899;
+  --status-open:#16a34a;
+  --status-in-progress:#f59e0b;
+  --status-closed:#6b7280;
+  /* legacy/alternate variable names used in some templates/components */
+  --color-open:var(--status-open);
+  --color-in-progress:var(--status-in-progress);
+  --color-closed:var(--status-closed);
+  --bg-light:#f6f7f8;
+  --bg-dark:#101922;
+  --color-muted:#6b7280;
+  --card-bg:#ffffff;
+  --card-shadow: 0 8px 30px rgba(2,6,23,0.06);
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{font-family:Manrope,Inter,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:var(--bg-light);color:#0f172a;-webkit-font-smoothing:antialiased}
+.container{max-width:var(--max-width);margin:0 auto;padding:24px}
+
+/* Center top-level app content to a maximum width */
+.app-shell{max-width:var(--max-width);margin:0 auto;padding-left:16px;padding-right:16px}
+.content{max-width:var(--max-width);margin:0 auto}
+
+/* Top header used across frameworks */
+.header{position:relative}
+.absolute-top .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.brand{font-size:20px;color:inherit}
+.nav-right{display:flex;gap:12px;align-items:center;transition:opacity .18s ease,transform .18s ease}
+.nav-right a{color:inherit;text-decoration:none}
+
+/* Nav toggle (mobile) */
+.nav-toggle{display:none;background:transparent;border:none;color:inherit;font-size:20px;padding:8px;border-radius:8px;cursor:pointer}
+.nav-close{display:none;background:transparent;border:none;color:inherit;font-size:22px;padding:8px;position:absolute;top:12px;right:12px;border-radius:6px;cursor:pointer}
+
+/* Mobile responsive nav behavior: collapsed by default, opens as a side drawer when .nav-open on root element */
+@media(max-width:900px){
+  .nav{align-items:center}
+  /* off-canvas drawer */
+  .nav-right{display:flex;position:fixed;top:0;right:0;height:100vh;width:280px;transform:translateX(100%);flex-direction:column;background:var(--card-bg);padding:72px 16px 16px;border-radius:0;box-shadow:var(--card-shadow);min-width:200px;transition:transform .28s cubic-bezier(.2,.9,.2,1);z-index:60}
+  .nav-toggle{display:inline-flex}
+  /* when toggled (documentElement.nav-open) slide drawer into view */
+  :root.nav-open .nav-right{transform:translateX(0)}
+  /* show the small close "X" inside the drawer */
+  .nav-close{display:inline-flex}
+  /* Make header take little vertical space on mobile */
+  .absolute-top .nav{padding:12px 0}
+}
+
+/* Hero styles (TicketFlow) */
+.hero--alt{position:relative;overflow:hidden;padding:80px 24px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff}
+.hero--alt .hero-inner{display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;margin:0 auto;max-width:900px}
+.hero-title{font-size:clamp(2rem,5.5vw,4rem);line-height:1.02;font-weight:800;margin:0}
+.hero-lead{color:rgba(255,255,255,0.95);max-width:720px;margin:0 auto}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+.btn-primary{background:#fff;color:var(--primary)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.9)}
+
+/* Decorative circles */
+.decor-circle{position:absolute;border-radius:50%;opacity:0.95}
+.decor-circle.one{right:14%;top:8%;width:160px;height:160px;background:rgba(255,255,255,0.08)}
+.decor-circle.small{width:96px;height:96px}
+.decor-circle.two{left:6%;top:40%;width:96px;height:96px;background:rgba(255,255,255,0.06)}
+
+/* Inline wave svg coloring */
+.hero--alt .wave{position:absolute;left:0;right:0;bottom:0;height:96px;width:100%;color:rgba(255,255,255,0.15)}
+
+/* Features grid */
+.grid{display:grid;gap:16px}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.card{background:rgba(255,255,255,0.95);border-radius:12px;padding:20px;box-shadow:var(--card-shadow)}
+.card h3{margin:12px 0 6px}
+.card p{color:var(--color-muted);margin:0}
+
+/* Status badges for tickets */
+.status{display:inline-block;padding:6px 10px;border-radius:999px;color:#fff;font-size:13px;font-weight:700}
+.status.open{background:var(--status-open)}
+.status.in_progress{background:var(--status-in-progress)}
+.status.closed{background:var(--status-closed)}
+
+@media(max-width:900px){.grid.cols-3{grid-template-columns:1fr}}
+
+.footer{padding:24px;text-align:center;color:var(--color-muted);font-size:14px}
+
+/* Small utilities */
+.button{background:var(--primary);color:#fff;padding:10px 14px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 6px 18px rgba(17,115,212,0.12);font-weight:700}
+.input{padding:10px;border-radius:8px;border:1px solid #e6e9ef;width:100%}
+.focus-outline:focus{outline:3px solid rgba(59,130,246,0.12);outline-offset:2px}
+
+/* Utility helpers to avoid inline styles in templates and keep parity */
+.row{display:flex;align-items:center;gap:12px}
+.row-between{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.centered{text-align:center}
+.center-block{margin:0 auto}
+.muted{color:var(--color-muted)}
+.stat-value{font-size:28px}
+.form-grid{display:grid;gap:8px}
+.two-col{display:grid;grid-template-columns:360px 1fr;gap:16px}
+.card-center{text-align:center}
+.avatar-large{width:64px;height:64px;margin:0 auto;border-radius:50%;background:rgba(17,115,212,0.08);display:flex;align-items:center;justify-content:center;color:var(--primary)}
+.full-width{width:100%;max-width:480px}
+.center-vh{min-height:calc(100vh - 120px);display:flex;align-items:center;justify-content:center;padding:48px 16px}
+.section-pad{padding:48px 24px}
+.card-inner{padding:18px}
+.h1-large{font-size:28px;margin:0}
+/* small helpers for form/labels and misc spacing */
+.label-stack{display:flex;flex-direction:column;gap:6px}
+.field-label{font-size:13px;color:#374151}
+.mt-18{margin-top:18px}
+.error-text{color:#ef4444;display:none;margin-top:-6px;margin-bottom:6px}
+.btn-cancel{background:#6b7280}
+.mb-12{margin-bottom:12px}
+.hidden{display:none}
+.row-between-start{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.col-end{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.btn-danger{background:#ef4444}
+
+/* Material symbol sizing helper */
+.material-symbol{font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24}
+.material-symbols-outlined{font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;font-size:28px;display:inline-flex;vertical-align:middle}
+
+/* Decorative fallback for small screens */
+@media(max-width:640px){
+  .hero--alt{padding:48px 16px}
+  .hero-title{font-size:28px}
+}
+
+/* Toast / error notification */
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;min-width:220px;max-width:min(92%,520px);padding:8px 12px;border-radius:10px;color:#fff;font-weight:700;box-shadow:0 8px 22px rgba(2,6,23,0.14);backdrop-filter:blur(3px)}
+.toast p{margin:0;font-size:13px}
+.toast .material-symbols-outlined{font-size:16px;display:inline-flex;align-items:center;justify-content:center}
+.toast--error{background:linear-gradient(90deg,#ef4444,#dc2626);border:1px solid rgba(255,255,255,0.06)}
+.toast--success{background:linear-gradient(90deg,#16a34a,#059669);border:1px solid rgba(255,255,255,0.06)}
+.toast--info{background:linear-gradient(90deg,#3b82f6,#06b6d4);border:1px solid rgba(255,255,255,0.06)}
+.toast--warning{background:linear-gradient(90deg,#f59e0b,#f97316);border:1px solid rgba(255,255,255,0.06)}
+
+@media(max-width:480px){
+  .toast{top:10px;min-width:200px;padding:8px}
+}
+
+/* small toast variant for compact confirmations (eg. delete) */
+.toast--small{min-width:100px;padding:4px 8px;font-weight:600;font-size:12px;border-radius:8px}
+.toast--small .material-symbols-outlined{font-size:14px}
+.toast .icon-wrap{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);margin-right:6px}
+.toast--small .icon-wrap{width:20px;height:20px;border-radius:6px;margin-right:6px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px}
+.header .brand{font-weight:700;font-size:18px}
+.header .nav{display:flex;gap:12px;align-items:center}
