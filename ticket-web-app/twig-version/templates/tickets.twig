@@ -1,0 +1,152 @@
+{% extends 'layout.twig' %}
+{% block title %}Tickets — TicketFlow{% endblock %}
+{% block body %}
+<main class="container">
+  <div class="row-between mb-12">
+    <h1 style="margin:0">Your Tickets</h1>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <h3 id="form-title">Create Ticket</h3>
+      <form id="ticket-form" class="form-grid">
+        <input id="t-title" class="input" placeholder="Title" />
+        <small id="t-title-error" class="error-text">Title required</small>
+        <textarea id="t-desc" class="input" placeholder="Description"></textarea>
+        <label>
+          Status
+          <select id="t-status" class="input">
+            <option value="open">open</option>
+            <option value="in_progress">in_progress</option>
+            <option value="closed">closed</option>
+          </select>
+        </label>
+        <div class="row">
+          <button type="button" id="t-submit" class="button">Create</button>
+          <button type="button" id="t-cancel" class="button btn-cancel hidden">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div>
+      <div id="tickets-grid" class="grid cols-3"></div>
+    </div>
+  </div>
+
+  <script>
+    // Minimal client-side ticket store and renderer using localStorage (mirrors the JS apps)
+    (function(){
+      const KEY = 'ticketapp_data'
+      function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]') }catch(e){ return [] } }
+      function save(list){ localStorage.setItem(KEY, JSON.stringify(list)); window.dispatchEvent(new Event('storage')) }
+
+      const grid = document.getElementById('tickets-grid')
+      const formTitle = document.getElementById('form-title')
+      const inputTitle = document.getElementById('t-title')
+      const inputDesc = document.getElementById('t-desc')
+      const inputStatus = document.getElementById('t-status')
+      const submitBtn = document.getElementById('t-submit')
+      const cancelBtn = document.getElementById('t-cancel')
+
+      let editingId = null
+
+      function render(){
+        const items = load()
+        grid.innerHTML = ''
+        if(items.length===0){
+          grid.innerHTML = '<div class="card"><p class="muted" style="margin:0">No tickets yet. Create one using the form.</p></div>'
+          updateStats()
+          return
+        }
+        items.forEach(t=>{
+          const el = document.createElement('div')
+          el.className = 'card'
+          el.innerHTML = `
+            <div class="row-between-start">
+              <div>
+                <h4 style="margin:0">${escapeHtml(t.title)}</h4>
+                <p class="muted" style="margin:6px 0 0">${escapeHtml(t.description||'')}</p>
+              </div>
+              <div class="col-end">
+                <span class="status ${t.status.replace(/\s+/g,'_')}">${t.status}</span>
+                <div style="display:flex;gap:6px">
+                  <button data-id="${t.id}" class="button edit">Edit</button>
+                  <button data-id="${t.id}" class="button btn-danger">Delete</button>
+                </div>
+              </div>
+            </div>
+          `
+          grid.appendChild(el)
+        })
+        updateStats()
+      }
+
+      function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+      function updateStats(){
+        // update dashboard stats if present
+        try{ if(window.parent && window.parent.document){ /* no-op */ } }catch(e){}
+      }
+
+      function createTicket(data){ const list = load(); data.id = Date.now(); list.push(data); save(list); render(); }
+      function deleteTicket(id){ const list = load().filter(i=>i.id!=id); save(list); render(); }
+      function editTicket(id, data){ const list = load().map(i=> i.id==id ? Object.assign({},i,data) : i); save(list); render(); }
+
+      grid.addEventListener('click', e=>{
+        const t = e.target
+        if(t.classList.contains('edit')){
+          const id = t.getAttribute('data-id')
+          const item = load().find(i=>i.id==id)
+          if(!item) return
+          editingId = id
+          formTitle.textContent = 'Edit Ticket'
+          inputTitle.value = item.title
+          inputDesc.value = item.description
+          inputStatus.value = item.status
+          submitBtn.textContent = 'Save'
+          cancelBtn.style.display = 'inline-block'
+        } else if(t.tagName==='BUTTON' && t.textContent.trim()==='Delete'){
+          const id = t.getAttribute('data-id')
+          if(!confirm('Delete this ticket?')) return
+          deleteTicket(id)
+          // show a small transient toast for delete confirmation
+          showSmallToast('Deleted','success')
+        }
+      })
+
+      submitBtn.addEventListener('click', ()=>{
+        const payload = { title: inputTitle.value.trim(), description: inputDesc.value.trim(), status: inputStatus.value }
+        const titleErrorEl = document.getElementById('t-title-error')
+        if(!payload.title){ titleErrorEl.style.display = 'block'; showSmallToast('Please fix the form and try again.','error'); return }
+        titleErrorEl.style.display = 'none'
+        if(editingId){ editTicket(editingId, payload); editingId = null; formTitle.textContent='Create Ticket'; submitBtn.textContent='Create'; cancelBtn.style.display='none' }
+        else { createTicket(payload) }
+        inputTitle.value = ''
+        inputDesc.value = ''
+        inputStatus.value = 'open'
+      })
+
+      cancelBtn.addEventListener('click', ()=>{
+        editingId = null; formTitle.textContent='Create Ticket'; submitBtn.textContent='Create'; cancelBtn.style.display='none'; inputTitle.value=''; inputDesc.value=''; inputStatus.value='open'
+      })
+
+      // initial render
+      // use global helper defined in layout.twig (showSmallToast)
+      function showSmallToast(msg, variant){
+        if(window && typeof window.showSmallToast === 'function') return window.showSmallToast(msg, variant, 1800)
+        // fallback (very unlikely): create minimal toast
+        const d = document.createElement('div')
+        d.className = 'toast toast--small ' + (variant?('toast--'+variant):'toast--info')
+        d.setAttribute('role','status')
+        d.setAttribute('aria-live','polite')
+        const icon = variant === 'success' ? 'check_circle' : (variant === 'error' ? 'error' : 'info')
+        d.innerHTML = `<span class="icon-wrap"><span class="material-symbols-outlined">${icon}</span></span><p>${escapeHtml(msg)}</p>`
+        document.body.appendChild(d)
+        setTimeout(()=>{ d.remove() },1800)
+      }
+
+      document.addEventListener('DOMContentLoaded', render)
+    })();
+  </script>
+</main>
+{% endblock %}
