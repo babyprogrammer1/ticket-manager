@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}TicketFlow{% endblock %}</title>
+  <link rel="stylesheet" href="/assets/shared-styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24} body{min-height:max(884px,100dvh);font-family:Manrope,Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial}</style>
+</head>
+<body>
+  <header class="header absolute-top">
+    <nav class="container nav">
+        <div class="row">
+        <div class="brand"><strong>TicketFlow</strong></div>
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="var open=document.documentElement.classList.toggle('nav-open');this.setAttribute('aria-expanded',open?'true':'false')">☰</button>
+      </div>
+      <div class="nav-right">
+        <button class="nav-close" aria-label="Close navigation" onclick="document.documentElement.classList.remove('nav-open');(document.querySelector('.nav-toggle')||{}).setAttribute('aria-expanded','false')">✕</button>
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/tickets">Tickets</a>
+        {% if session %}
+          <a class="button" href="/logout">Logout</a>
+        {% else %}
+          <a class="button" href="/auth/login">Login</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  {# Flash / toast support: set `flash` when rendering to show a temporary notification #}
+  {% if flash is defined and flash %}
+    <div class="toast toast--info" role="status" aria-live="polite">
+      <span class="icon-wrap"><span class="material-symbols-outlined">info</span></span>
+      <p>{{ flash }}</p>
+    </div>
+  {% endif %}
+
+  <div class="app-shell">
+    <main class="content">
+      {% block body %}{% endblock %}
+    </main>
+
+    <footer class="footer container">
+      <div class="row-centered muted" style="justify-content:center;align-items:center;height:100%">
+        <div class="muted">© {{ "now"|date("Y") }} TicketFlow. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+  <script>
+    // Global toast helpers for consistent markup across Twig pages.
+    (function(){
+      function escapeHtml(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+      function createToast(msg, variant, small, timeout){
+        const d = document.createElement('div')
+        d.className = 'toast ' + (small? 'toast--small ' : '') + (variant?('toast--'+variant):'toast--info')
+        d.setAttribute('role','status')
+        d.setAttribute('aria-live','polite')
+        const icon = variant === 'success' ? 'check_circle' : (variant === 'error' ? 'error' : 'info')
+        d.innerHTML = `<span class="icon-wrap"><span class="material-symbols-outlined">${icon}</span></span><p>${escapeHtml(msg)}</p>`
+        document.body.appendChild(d)
+
+        // Auto-dismiss with exit animation: add leaving class and remove after animation ends
+        const life = typeof timeout === 'number' ? timeout : 2000
+        setTimeout(()=>{
+          d.classList.add('toast--leaving')
+          d.addEventListener('animationend', ()=>{ d.remove() }, {once:true})
+        }, life)
+
+        return d
+      }
+
+      if(typeof window.showSmallToast !== 'function'){
+        window.showSmallToast = function(msg, variant, timeout){ return createToast(msg, variant, true, timeout) }
+      }
+      if(typeof window.showToast !== 'function'){
+        window.showToast = function(msg, variant, timeout){ return createToast(msg, variant, false, timeout) }
+      }
+      // Auto-dismiss any server-rendered flash/toast elements (rendered on initial HTML)
+      document.addEventListener('DOMContentLoaded', function(){
+        const existing = document.querySelectorAll('.toast')
+        existing.forEach(el=>{
+          // don't double-dismiss elements created by our helper during the same run
+          if(el.dataset.__toastManaged) return
+          // mark managed and schedule leaving
+          el.dataset.__toastManaged = '1'
+          setTimeout(()=>{
+            el.classList.add('toast--leaving')
+            el.addEventListener('animationend', ()=>{ el.remove() }, {once:true})
+          }, 3000)
+        })
+      })
+    })();
+  </script>
+</body>
+</html>
