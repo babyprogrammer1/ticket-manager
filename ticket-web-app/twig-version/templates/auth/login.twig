@@ -1,0 +1,27 @@
+{% extends 'layout.twig' %}
+{% block title %}Login — TicketApp{% endblock %}
+{% block body %}
+<main class="container center-vh">
+  <div class="card full-width">
+    <div class="card-inner">
+      <h1 class="h1-large">Welcome Back!</h1>
+      <p class="muted" style="margin-top:8px">Sign in to continue to your dashboard</p>
+      <form method="post" action="/auth/login" class="form-grid mt-18">
+        <label class="label-stack">
+          <span class="field-label">Email</span>
+          <input class="input focus-outline" name="email" required />
+        </label>
+        <label class="label-stack">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span class="field-label">Password</span>
+            <a href="#" style="font-size:13px;color:var(--primary)">Forgot?</a>
+          </div>
+          <input type="password" class="input focus-outline" name="password" required />
+        </label>
+        <button class="button" type="submit" style="width:100%">Login</button>
+        <p class="centered muted" style="margin:0;font-size:14px">Don't have an account? <a class="" href="/auth/signup" style="color:var(--primary);font-weight:700">Sign up</a></p>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock %}
