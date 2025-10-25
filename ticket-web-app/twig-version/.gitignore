@@ -1,0 +1,22 @@
+# Ignore composer vendor by default (if you install via composer on the server)
+vendor/
+
+# Ignore local config and environment files
+.env
+.env.*
+
+# Ignore PHPStorm / VSCode
+.idea/
+.vscode/
+
+# PHP caches and logs
+cache/
+logs/
+
+# Public-side static build copies (if you copy frontend builds here during dev)
+public/react/
+public/vue/
+
+# OS
+.DS_Store
+Thumbs.db
