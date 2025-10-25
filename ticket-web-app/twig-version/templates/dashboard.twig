@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+{% block title %}Dashboard — TicketFlow{% endblock %}
+{% block body %}
+<main class="container">
+  <div class="grid cols-3">
+    <div class="card">
+      <h4>Total tickets</h4>
+      <p class="stat-value" id="stat-total">0</p>
+    </div>
+    <div class="card">
+      <h4>Open</h4>
+      <p class="stat-value" style="color:var(--color-open)" id="stat-open">0</p>
+    </div>
+    <div class="card">
+      <h4>Resolved</h4>
+      <p class="stat-value" style="color:var(--color-closed)" id="stat-closed">0</p>
+    </div>
+  </div>
+
+  <script>
+    // Small client-side stats helper to mirror the JS app behavior using localStorage
+    (function(){
+      function load(){
+        try{ return JSON.parse(localStorage.getItem('ticketapp_data')||'[]') }catch(e){return[]}
+      }
+      function updateStats(){
+        const tickets = load();
+        const total = tickets.length;
+        const open = tickets.filter(t=>t.status==='open').length;
+        const closed = tickets.filter(t=>t.status==='closed').length;
+        document.getElementById('stat-total').textContent = total;
+        document.getElementById('stat-open').textContent = open;
+        document.getElementById('stat-closed').textContent = closed;
+      }
+      document.addEventListener('DOMContentLoaded', updateStats);
+      window.addEventListener('storage', updateStats);
+    })();
+  </script>
+</main>
+{% endblock %}
