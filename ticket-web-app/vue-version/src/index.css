@@ -1,0 +1,9 @@
+@import '/assets/shared-styles.css';
+
+.app-shell{min-height:100vh;display:flex;flex-direction:column}
+.header{display:flex;justify-content:space-between;align-items:center;padding:16px}
+.content{flex:1;padding:24px}
+.ticket-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:900px){.ticket-list{grid-template-columns:1fr}}
+/* toasts are styled by the shared stylesheet (public/assets/shared-styles.css)
+	to keep visual parity across frameworks. Avoid local overrides here. */
