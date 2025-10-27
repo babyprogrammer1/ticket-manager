@@ -36,10 +36,6 @@ npm run dev
 - API-level auth checks: mockApi returns UNAUTHORIZED rejections when no session; components handle these by showing a toast and redirecting to login.
 - Toasts use aria-live and role=status for screen-reader announcements.
 
-## Known issues & notes
-- No server persistence; the mock API is purely localStorage-backed.
-- Accessibility polish (focus-trap, overlay keyboard handling) is not yet implemented but planned.
-
 ## Example test credentials
 - Any email/password are accepted. Example:
   - Email: demo@ticketapp.local
