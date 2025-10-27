@@ -40,11 +40,6 @@ npm run dev
 - Toasts: accessible role="status" / aria-live used to announce to screen readers.
 - Mobile nav: off-canvas drawer with aria-expanded and aria-hidden toggles.
 
-## Known issues & notes
-- This app uses a simple mock API (localStorage). No backend persistence.
-- No token refresh or server sessions beyond the simple session mock — clearing localStorage simulates session expiry.
-- Accessibility: focus trap for off-canvas drawer is not implemented yet (planned enhancement).
-
 ## Example test credentials
 - Any email/password will be accepted for the mock login. Example:
   - Email: demo@ticketapp.local
