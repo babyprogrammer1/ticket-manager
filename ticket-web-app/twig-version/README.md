@@ -36,10 +36,6 @@ php -S localhost:8000 -t public
 - Client-side validation: tickets form shows inline validation and uses small toasts for confirmations and errors.
 - Toasts: accessible role and aria-live are used for announcements.
 
-## Known issues & notes
-- The tickets list in Twig uses localStorage for persistence (so it's consistent with JS implementations). This is a minimal demo — not a production backend.
-- If the built-in PHP server doesn't start in your environment, ensure Composer is installed and `vendor/autoload.php` exists (see error message in `public/index.php` for guidance).
-
 ## Example test user
 - Login form accepts any email/password for the mock flow. Example credentials:
   - Email: demo@ticketapp.local
